@@ -1,4 +1,4 @@
-# 🌾 Mixed-Integer Linear Programming (MILP) Formulation
+# Mixed-Integer Linear Programming (MILP) Formulation
 
 This document describes the complete mathematical structure of the Indian Perishable Agricultural Supply Chain Network Design Optimizer.
 
@@ -30,18 +30,18 @@ This document describes the complete mathematical structure of the Indian Perish
 ## 3. Parameters
 
 ### Distance & Costs
-* $\text{DistFarm}_{f,h}$: Spherical distance between farm $f$ and hub $h$ in kilometers (km).
-* $\text{DistHub}_{h,m}$: Spherical distance between hub $h$ and market $m$ in kilometers (km).
-* $C^{\text{ship}}$: Shipping tariff rate per unit of distance (₹/ton-km).
+* $\mathrm{DistFarm}_{f,h}$: Spherical distance between farm $f$ and hub $h$ in kilometers (km).
+* $\mathrm{DistHub}_{h,m}$: Spherical distance between hub $h$ and market $m$ in kilometers (km).
+* $C^{\mathrm{ship}}$: Shipping tariff rate per unit of distance (₹/ton-km).
 * $F_h$: Fixed monthly cost to lease and operate hub $h$ (₹/month).
 * $H_c$: Inventory holding cost per unit of volume stored (₹/ton/month).
 * $P_c$: Shortage penalty cost per unit of unmet customer demand (₹/ton).
 
 ### Operational Capacities
-* $\text{CapProcessing}_h$: Monthly maximum processing throughput capacity of hub $h$ (tons).
-* $\text{CapStorage}_h$: Maximum inventory capacity of hub $h$ (tons).
-* $\text{Supply}_{f,c,t}$: Harvest supply capacity of crop $c$ at farm $f$ in month $t$ (tons).
-* $\text{Demand}_{m,c,t}$: Consumer demand for crop $c$ at market $m$ in month $t$ (tons).
+* $\mathrm{CapProcessing}_h$: Monthly maximum processing throughput capacity of hub $h$ (tons).
+* $\mathrm{CapStorage}_h$: Maximum inventory capacity of hub $h$ (tons).
+* $\mathrm{Supply}_{f,c,t}$: Harvest supply capacity of crop $c$ at farm $f$ in month $t$ (tons).
+* $\mathrm{Demand}_{m,c,t}$: Consumer demand for crop $c$ at market $m$ in month $t$ (tons).
 
 ### Crop Perishability Rates
 * $\alpha_c$: Transit loss coefficient of crop $c$ between farms and hubs (loss fraction per km).
@@ -55,14 +55,14 @@ This document describes the complete mathematical structure of the Indian Perish
 Minimize the total system operations cost over the planning horizon:
 
 $$
-\min Z = \text{FixedHubCost} + \text{TransportationCost} + \text{HoldingCost} + \text{ShortagePenalty}
+\min Z = \mathrm{FixedHubCost} + \mathrm{TransportationCost} + \mathrm{HoldingCost} + \mathrm{ShortagePenalty}
 $$
 
 Detailed expansion:
 
 $$
 \min Z = \sum_{t \in T} \sum_{h \in H} F_h y_h 
-+ C^{\text{ship}} \sum_{t \in T} \left( \sum_{f \in F}\sum_{h \in H}\sum_{c \in C} \text{DistFarm}_{f,h} x_{f,h,c,t} + \sum_{h \in H}\sum_{m \in M}\sum_{c \in C} \text{DistHub}_{h,m} z_{h,m,c,t} \right)
++ C^{\mathrm{ship}} \sum_{t \in T} \left( \sum_{f \in F}\sum_{h \in H}\sum_{c \in C} \mathrm{DistFarm}_{f,h} x_{f,h,c,t} + \sum_{h \in H}\sum_{m \in M}\sum_{c \in C} \mathrm{DistHub}_{h,m} z_{h,m,c,t} \right)
 + \sum_{t \in T}\sum_{h \in H}\sum_{c \in C} H_c I_{h,c,t}
 + \sum_{t \in T}\sum_{m \in M}\sum_{c \in C} P_c s_{m,c,t}
 $$
@@ -75,14 +75,14 @@ $$
 The total outflow of crop $c$ shipped from farm $f$ to all candidate hubs in month $t$ cannot exceed its seasonal harvest supply:
 
 $$
-\sum_{h \in H} x_{f,h,c,t} \le \text{Supply}_{f,c,t} \quad \forall f \in F, c \in C, t \in T
+\sum_{h \in H} x_{f,h,c,t} \le \mathrm{Supply}_{f,c,t} \quad \forall f \in F, c \in C, t \in T
 $$
 
 ### B. Market Demand Conservation
 The sum of flows arriving at market $m$ from all hubs (discounted by the transit spoilage over distance) plus the unmet shortage variable must equal the consumer demand:
 
 $$
-\sum_{h \in H} z_{h,m,c,t} \cdot \left(1 - \beta_c \text{DistHub}_{h,m}\right) + s_{m,c,t} = \text{Demand}_{m,c,t} \quad \forall m \in M, c \in C, t \in T
+\sum_{h \in H} z_{h,m,c,t} \cdot \left(1 - \beta_c \mathrm{DistHub}_{h,m}\right) + s_{m,c,t} = \mathrm{Demand}_{m,c,t} \quad \forall m \in M, c \in C, t \in T
 $$
 
 ### C. Hub Inflow-Outflow & Inventory Balance
@@ -91,13 +91,13 @@ For each hub $h$, crop $c$, and month $t$:
 *   **Month $t = 1$** (Initial stock is assumed to be $0$):
 
 $$
-I_{h,c,1} = \sum_{f \in F} x_{f,h,c,1} \cdot \left(1 - \alpha_c \text{DistFarm}_{f,h}\right) - \sum_{m \in M} z_{h,m,c,1}
+I_{h,c,1} = \sum_{f \in F} x_{f,h,c,1} \cdot \left(1 - \alpha_c \mathrm{DistFarm}_{f,h}\right) - \sum_{m \in M} z_{h,m,c,1}
 $$
 
 *   **Months $t > 1$** (Ending stock equals previous stock adjusted for monthly spoilage, plus net incoming flows):
 
 $$
-I_{h,c,t} = I_{h,c,t-1}\cdot\left(1 - \gamma_c\right) + \sum_{f \in F} x_{f,h,c,t} \cdot \left(1 - \alpha_c \text{DistFarm}_{f,h}\right) - \sum_{m \in M} z_{h,m,c,t}
+I_{h,c,t} = I_{h,c,t-1}\cdot\left(1 - \gamma_c\right) + \sum_{f \in F} x_{f,h,c,t} \cdot \left(1 - \alpha_c \mathrm{DistFarm}_{f,h}\right) - \sum_{m \in M} z_{h,m,c,t}
 $$
 
 ### D. Hub Capacity Limits (Big-M Linking Constraints)
@@ -106,11 +106,11 @@ These constraints link the continuous flow and inventory decisions to the strate
 *   **Hub Processing Throughput Capacity**:
 
 $$
-\sum_{f \in F}\sum_{c \in C} x_{f,h,c,t} \le \text{CapProcessing}_h \cdot y_h \quad \forall h \in H, t \in T
+\sum_{f \in F}\sum_{c \in C} x_{f,h,c,t} \le \mathrm{CapProcessing}_h \cdot y_h \quad \forall h \in H, t \in T
 $$
 
 *   **Hub Storage Capacity**:
 
 $$
-\sum_{c \in C} I_{h,c,t} \le \text{CapStorage}_h \cdot y_h \quad \forall h \in H, t \in T
+\sum_{c \in C} I_{h,c,t} \le \mathrm{CapStorage}_h \cdot y_h \quad \forall h \in H, t \in T
 $$
