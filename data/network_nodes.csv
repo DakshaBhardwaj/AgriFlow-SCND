@@ -1,0 +1,10 @@
+node_id,name,type,lat,lon,fixed_cost,storage_cap,process_cap
+Farm_Shimla,Shimla Orchard,Farm,31.1048,77.1734,0,0,0
+Farm_Nagpur,Nagpur Orange Farm,Farm,21.1458,79.0882,0,0,0
+Farm_Nashik,Nashik Agri Land,Farm,19.9975,73.7898,0,0,0
+Hub_Delhi,Delhi Cold Chain Hub,Hub,28.6139,77.209,230000,800,1000
+Hub_Indore,Indore Regional Storage,Hub,22.7196,75.8577,100000,500,600
+Hub_Hyderabad,Hyderabad Distribution Hub,Hub,17.385,78.4867,190000,600,750
+Market_Mumbai,Mumbai Wholesale Market,Market,19.076,72.8777,0,0,0
+Market_Delhi,Azadpur Mandi Delhi,Market,28.5355,77.391,0,0,0
+Market_Bengaluru,Bengaluru Central Market,Market,12.9716,77.5946,0,0,0

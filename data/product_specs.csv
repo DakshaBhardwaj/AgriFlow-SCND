@@ -1,0 +1,4 @@
+product_id,price_per_ton,holding_cost,shortage_penalty,spoilage_rate,transit_loss_per_km
+Apples,90000,1200,180000,0.02,5e-05
+Oranges,40000,800,80000,0.06,0.00015
+Onions,20000,500,40000,0.04,0.0001
