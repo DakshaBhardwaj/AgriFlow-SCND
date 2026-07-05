@@ -87,23 +87,30 @@ $$
 
 ### C. Hub Inflow-Outflow & Inventory Balance
 For each hub $h$, crop $c$, and month $t$:
-* **Month $t = 1$** (Initial stock is assumed to be $0$):
-  $$
-  I_{h,c,1} = \sum_{f \in F} x_{f,h,c,1} \cdot \left(1 - \alpha_c \text{DistFarm}_{f,h}\right) - \sum_{m \in M} z_{h,m,c,1}
-  $$
-* **Months $t > 1$** (Ending stock equals previous stock adjusted for monthly spoilage, plus net incoming flows):
-  $$
-  I_{h,c,t} = I_{h,c,t-1}\cdot\left(1 - \gamma_c\right) + \sum_{f \in F} x_{f,h,c,t} \cdot \left(1 - \alpha_c \text{DistFarm}_{f,h}\right) - \sum_{m \in M} z_{h,m,c,t}
-  $$
+
+*   **Month $t = 1$** (Initial stock is assumed to be $0$):
+
+$$
+I_{h,c,1} = \sum_{f \in F} x_{f,h,c,1} \cdot \left(1 - \alpha_c \text{DistFarm}_{f,h}\right) - \sum_{m \in M} z_{h,m,c,1}
+$$
+
+*   **Months $t > 1$** (Ending stock equals previous stock adjusted for monthly spoilage, plus net incoming flows):
+
+$$
+I_{h,c,t} = I_{h,c,t-1}\cdot\left(1 - \gamma_c\right) + \sum_{f \in F} x_{f,h,c,t} \cdot \left(1 - \alpha_c \text{DistFarm}_{f,h}\right) - \sum_{m \in M} z_{h,m,c,t}
+$$
 
 ### D. Hub Capacity Limits (Big-M Linking Constraints)
 These constraints link the continuous flow and inventory decisions to the strategic binary decision variable $y_h$. If a hub is closed ($y_h = 0$), its capacities are forced to zero, disabling all incoming flows and storage.
 
-* **Hub Processing Throughput Capacity**:
-  $$
-  \sum_{f \in F}\sum_{c \in C} x_{f,h,c,t} \le \text{CapProcessing}_h \cdot y_h \quad \forall h \in H, t \in T
-  $$
-* **Hub Storage Capacity**:
-  $$
-  \sum_{c \in C} I_{h,c,t} \le \text{CapStorage}_h \cdot y_h \quad \forall h \in H, t \in T
-  $$
+*   **Hub Processing Throughput Capacity**:
+
+$$
+\sum_{f \in F}\sum_{c \in C} x_{f,h,c,t} \le \text{CapProcessing}_h \cdot y_h \quad \forall h \in H, t \in T
+$$
+
+*   **Hub Storage Capacity**:
+
+$$
+\sum_{c \in C} I_{h,c,t} \le \text{CapStorage}_h \cdot y_h \quad \forall h \in H, t \in T
+$$
